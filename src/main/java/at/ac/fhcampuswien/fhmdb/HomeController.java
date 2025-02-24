@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -51,9 +52,6 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Genre.values());
 
 
-        // TODO add event handlers to buttons and call the regarding methods
-        // either set event handlers in the fxml file (onAction) or add them here
-
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
             if (sortBtn.getText().equals("Sort (asc)")) {
@@ -64,6 +62,23 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort (asc)");
             }
         });
+
+
+    }
+
+    public void searchBtnClicked(ActionEvent actionEvent) {
+        String searchText = searchField.getText().trim().toLowerCase();
+        Object selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
+
+        List<Movie> filteredMovies = allMovies;
+
+        if (!searchText.equals("")) {
+            filteredMovies = filterByString(searchText, filteredMovies);
+        }
+        if (selectedGenre != null && !selectedGenre.toString().equals("ALL GENRES")) {
+            filteredMovies = filterByGenre((Genre) selectedGenre, filteredMovies);
+        }
+        observableMovies.setAll(filteredMovies);
 
 
     }
