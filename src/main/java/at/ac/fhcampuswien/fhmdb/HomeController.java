@@ -37,11 +37,11 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
-    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        initializeObserverable();
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -63,7 +63,12 @@ public class HomeController implements Initializable {
             }
         });
 
+    }
 
+    public void initializeObserverable()
+    {
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);         // add dummy data to observable list
     }
 
     public void searchBtnClicked(ActionEvent actionEvent) {
