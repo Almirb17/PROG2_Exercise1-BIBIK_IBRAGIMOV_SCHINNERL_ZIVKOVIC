@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -63,6 +64,31 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort (asc)");
             }
         });
+
+
+    }
+
+    public List<Movie> filterByString(String inputText, List<Movie> movies) {
+        inputText = inputText.toLowerCase();
+        List<Movie> result = new ArrayList<>();
+
+        if (inputText == null || inputText.isEmpty()) {
+            return movies;
+        }
+
+        for (Movie movie : movies) {
+            if (movie == null) {
+                continue;
+            }
+
+            String title = movie.getTitle().toLowerCase();
+            String description = movie.getDescription().toLowerCase();
+
+            if (title.contains(inputText) || description.contains(inputText)) {
+                result.add(movie);
+            }
+        }
+        return result;
 
 
     }
