@@ -56,7 +56,7 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
+            if (sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending
                 sortBtn.setText("Sort (desc)");
             } else {
@@ -90,6 +90,23 @@ public class HomeController implements Initializable {
         }
         return result;
 
+    }
 
+    public List<Movie> filterByGenre(Genre genre, List<Movie> movies) {
+        List<Movie> result = new ArrayList<>();
+        if (genre == null) {
+            return movies;
+        }
+
+        for (Movie movie : movies) {
+            if (movie == null || movie.getGenres() == null) {
+                continue;
+            }
+
+            if (movie.getGenres().contains(genre)) {
+                result.add(movie);
+            }
+        }
+        return result;
     }
 }
