@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -52,13 +53,12 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Genre.values());
 
 
-        // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
             if (sortBtn.getText().equals("Sort (asc)")) {
-                // TODO sort observableMovies ascending
+                observableMovies.sort(Comparator.comparing(Movie::getTitle));
                 sortBtn.setText("Sort (desc)");
             } else {
-                // TODO sort observableMovies descending
+                observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
                 sortBtn.setText("Sort (asc)");
             }
         });
