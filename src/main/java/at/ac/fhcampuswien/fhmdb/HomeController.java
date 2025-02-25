@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         initializeObserverable();
 
         // initialize UI stuff
@@ -62,6 +64,14 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort (asc)");
             }
         });
+
+        searchField.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER)
+            {
+                searchBtnClicked(null);
+            }
+        });
+
 
     }
 
