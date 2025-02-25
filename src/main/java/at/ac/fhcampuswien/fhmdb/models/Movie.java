@@ -55,7 +55,6 @@ public class Movie {
                 "A young aristocrat falls in love with a kind but poor artist aboard the ill-fated Titanic, as the ship meets its tragic destiny.",
                 Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.HISTORY)));
 
-        // Neue Filme hinzugefügt
         movies.add(new Movie(
                 "Inception",
                 "A thief who enters people's dreams to steal secrets is given the task of planting an idea into someone's mind.",

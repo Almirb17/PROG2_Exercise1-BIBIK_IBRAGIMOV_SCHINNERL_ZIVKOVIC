@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -7,13 +9,12 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class HomeControllerTest {
     private static HomeController homeController;
@@ -23,21 +24,12 @@ class HomeControllerTest {
         homeController = new HomeController();
     }
 
-
-    //-------------------------------------public void initialize(URL url, ResourceBundle resourceBundle)---------------------------------------------------------
-
-
-
     //-------------------------------------public void initializeObserverable()-----------------------------------------------------------------------------------
     @Test
     void dummy_films_are_inside_observable_list() {
         homeController.initializeObserverable();
         assertEquals(homeController.allMovies, homeController.observableMovies);
     }
-
-    //-------------------------------------public void searchBtnClicked(ActionEvent actionEvent)------------------------------------------------------------------
-
-
 
     //-------------------------------------public List<Movie> filterByString(String inputText, List<Movie> movies)------------------------------------------------
     @Test
@@ -266,7 +258,6 @@ class HomeControllerTest {
         assertEquals(moviesExpected, movies);
     }
 
-
     @Test
     void right_search_string_but_wrong_genre_returns_empty_list() {
         //given
@@ -311,7 +302,37 @@ class HomeControllerTest {
 
     //-------------------------------------Sorting------------------------------------------------------
 
+    @Test
+    void observable_list_is_descending() {
+        //given
+        homeController.initializeObserverable();
+        ObservableList<Movie> oldMoviesOrder = FXCollections.observableArrayList(homeController.observableMovies);
 
+        //when
+        homeController.sortObserverable(false);
+
+        ObservableList<Movie> expectedMoviesOrder = FXCollections.observableArrayList(oldMoviesOrder);
+        expectedMoviesOrder.sort(Comparator.comparing(Movie::getTitle).reversed());
+
+        //then
+        assertEquals(expectedMoviesOrder, homeController.observableMovies);
+    }
+
+    @Test
+    void observable_list_is_ascending() {
+        //given
+        homeController.initializeObserverable();
+        ObservableList<Movie> oldMoviesOrder = FXCollections.observableArrayList(homeController.observableMovies);
+
+        //when
+        homeController.sortObserverable(true);
+
+        ObservableList<Movie> expectedMoviesOrder = FXCollections.observableArrayList(oldMoviesOrder);
+        expectedMoviesOrder.sort(Comparator.comparing(Movie::getTitle));
+
+        //then
+        assertEquals(expectedMoviesOrder, homeController.observableMovies);
+    }
 }
 
 
