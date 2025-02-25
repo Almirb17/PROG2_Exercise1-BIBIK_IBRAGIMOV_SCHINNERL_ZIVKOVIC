@@ -56,13 +56,7 @@ public class HomeController implements Initializable {
 
 
         sortBtn.setOnAction(actionEvent -> {
-            if (sortBtn.getText().equals("Sort (asc)")) {
-                observableMovies.sort(Comparator.comparing(Movie::getTitle));
-                sortBtn.setText("Sort (desc)");
-            } else {
-                observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-                sortBtn.setText("Sort (asc)");
-            }
+            sortObserverable();
         });
 
         searchField.setOnKeyPressed(keyEvent -> {
@@ -79,6 +73,17 @@ public class HomeController implements Initializable {
     {
         observableMovies.clear();
         observableMovies.addAll(allMovies);         // add dummy data to observable list
+    }
+
+    public void sortObserverable()
+    {
+        if (sortBtn.getText().equals("Sort (asc)")) {
+            observableMovies.sort(Comparator.comparing(Movie::getTitle));
+            sortBtn.setText("Sort (desc)");
+        } else {
+            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+            sortBtn.setText("Sort (asc)");
+        }
     }
 
     public void searchBtnClicked(ActionEvent actionEvent) {
