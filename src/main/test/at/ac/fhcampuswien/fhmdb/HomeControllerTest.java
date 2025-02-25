@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
-//import org.junit.jupiter.params.ParameterizedTest;
-//import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,32 +38,53 @@ class HomeControllerTest {
 
 
     //-------------------------------------public List<Movie> filterByString(String inputText, List<Movie> movies)------------------------------------------------
-//    @ParameterizedTest
-//    @ValueSource(strings = {"Joker", "joker", "JoKer","joKER"})
-//    void filter_by_string_matches_with_actual_output(String input)
-//    {
-//        //given
-//        homeController.initializeObserverable();
-//        List<Movie> movies = homeController.filterByString(input, homeController.observableMovies);
-//
-//        //when
-//        List<Movie> moviesExpected = Arrays.asList(
-//                new Movie(
-//                        "Joker",
-//                        "A mentally troubled comedian, Arthur Fleck, embarks on a downward spiral of revolution and bloody crime in Gotham City, leading to his alter ego: the Joker.",
-//                        Arrays.asList(Genre.DRAMA, Genre.THRILLER, Genre.CRIME)),
-//                new Movie(
-//                        "The Dark Knight",
-//                        "Batman faces his greatest challenge when the Joker wreaks havoc on Gotham, testing the hero's limits and morality.",
-//                        Arrays.asList(Genre.ACTION, Genre.CRIME, Genre.DRAMA))
-//        );
-//
-//        //then
-//        assertEquals(moviesExpected,movies);
-//    }
+    @Test
+    void filter_by_string_throws_IllegalArgumentException_when_observableMoviesAreNull() {
+        //given
+        homeController.initializeObserverable();
+
+        //when & then
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filterByString("Joker", null);
+        });
+    }
 
     @Test
-    void filter_by_string_matches_with_expected_output_when_search_string_contains_space()
+    void filter_by_string_throws_IllegalArgumentException_when_input_text_is_null() {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByString(null, homeController.observableMovies);
+
+        //when & then
+        assertEquals(10, movies.size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Joker", "joker", "JoKer","joKER", "JOKER"})
+    void filter_by_title_string_matches_with_expected_output(String input)
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByString(input, homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList(
+                new Movie(
+                        "Joker",
+                        "A mentally troubled comedian, Arthur Fleck, embarks on a downward spiral of revolution and bloody crime in Gotham City, leading to his alter ego: the Joker.",
+                        Arrays.asList(Genre.DRAMA, Genre.THRILLER, Genre.CRIME)),
+                new Movie(
+                        "The Dark Knight",
+                        "Batman faces his greatest challenge when the Joker wreaks havoc on Gotham, testing the hero's limits and morality.",
+                        Arrays.asList(Genre.ACTION, Genre.CRIME, Genre.DRAMA))
+        );
+
+        //then
+        assertEquals(moviesExpected,movies);
+    }
+
+    @Test
+    void filter_by_title_string_matches_with_expected_output_when_search_string_contains_space()
     {
         //given
         homeController.initializeObserverable();
@@ -74,7 +95,7 @@ class HomeControllerTest {
     }
 
     @Test
-    void filter_by_string_when_input_empty_output_nothing_should_happen_to_observable_list()
+    void filter_by_title_string_when_input_empty_output_nothing_should_happen_to_observable_list()
     {
         //given
         homeController.initializeObserverable();
@@ -83,6 +104,27 @@ class HomeControllerTest {
         //when & then
         assertEquals(10, movies.size());
     }
+
+    @Test
+    void filter_by_descriptive_string_matches_with_expected_output()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByString("wreaks havoc on Gotham",homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList(
+                new Movie(
+                        "The Dark Knight",
+                        "Batman faces his greatest challenge when the Joker wreaks havoc on Gotham, testing the hero's limits and morality.",
+                        Arrays.asList(Genre.ACTION, Genre.CRIME, Genre.DRAMA))
+        );
+
+        //then
+        assertEquals(moviesExpected,movies);
+    }
+
+
 
     //-------------------------------------public List<Movie> filterByGenre(Genre genre, List<Movie> movies)------------------------------------------------------
     @Test

@@ -99,11 +99,16 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> filterByString(String inputText, List<Movie> movies) {
-        inputText = inputText.toLowerCase();
-        List<Movie> result = new ArrayList<>();
 
         if (inputText == null || inputText.isEmpty()) {
             return movies;
+        }
+
+        inputText = inputText.toLowerCase();
+        List<Movie> result = new ArrayList<>();
+
+        if (movies == null) {
+            throw new IllegalArgumentException("The movies list cannot be null.");
         }
 
         for (Movie movie : movies) {
