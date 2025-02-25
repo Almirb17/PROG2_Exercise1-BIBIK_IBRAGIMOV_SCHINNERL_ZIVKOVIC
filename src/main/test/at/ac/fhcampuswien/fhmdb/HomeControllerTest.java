@@ -55,8 +55,10 @@ class HomeControllerTest {
         homeController.initializeObserverable();
         List<Movie> movies = homeController.filterByString(null, homeController.observableMovies);
 
-        //when & then
-        assertEquals(10, movies.size());
+        //when
+        List<Movie> moviesExpected = homeController.observableMovies;
+        //then
+        assertEquals(moviesExpected, movies);
     }
 
     @ParameterizedTest
@@ -88,7 +90,7 @@ class HomeControllerTest {
     {
         //given
         homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByString("jok er",homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString("jok     er",homeController.observableMovies);
 
         //when & then
         assertEquals(0,movies.size());
@@ -101,8 +103,10 @@ class HomeControllerTest {
         homeController.initializeObserverable();
         List<Movie> movies = homeController.filterByString(" ",homeController.observableMovies);
 
-        //when & then
-        assertEquals(10, movies.size());
+        //when
+        List<Movie> moviesExpected = homeController.observableMovies;
+        //then
+        assertEquals(moviesExpected, movies);
     }
 
     @Test
@@ -148,13 +152,15 @@ class HomeControllerTest {
         List<Movie> movies = homeController.filterByGenre(Genre.ROMANCE,homeController.observableMovies);
 
         //when
-
         List<Movie> moviesExpected = new ArrayList<>();
         moviesExpected.add(new Movie(
                 "Titanic",
                 "A young aristocrat falls in love with a kind but poor artist aboard the ill-fated Titanic, as the ship meets its tragic destiny.",
                 Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.HISTORY)));
+
         //then
         assertEquals(moviesExpected,movies);
     }
+
+
 }
