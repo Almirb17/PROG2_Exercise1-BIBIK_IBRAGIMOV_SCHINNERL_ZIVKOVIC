@@ -33,17 +33,15 @@ class HomeControllerTest {
         homeController.initializeObserverable();
         assertEquals(homeController.allMovies, homeController.observableMovies);
     }
+
     //-------------------------------------public void searchBtnClicked(ActionEvent actionEvent)------------------------------------------------------------------
 
 
 
     //-------------------------------------public List<Movie> filterByString(String inputText, List<Movie> movies)------------------------------------------------
     @Test
-    void filter_by_string_throws_IllegalArgumentException_when_observableMoviesAreNull() {
-        //given
-        homeController.initializeObserverable();
+    void filter_by_string_throws_IllegalArgumentException_when_movie_is_null() {
 
-        //when & then
         assertThrows(IllegalArgumentException.class, () -> {
             homeController.filterByString("Joker", null);
         });
@@ -51,15 +49,53 @@ class HomeControllerTest {
 
     @Test
     void filter_by_string_throws_IllegalArgumentException_when_input_text_is_null() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filterByString(null, homeController.observableMovies);
+        });
+    }
+
+    @Test
+    void filter_by_string_throws_IllegalArgumentException_when_input_text_and_movie_is_null() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filterByString(null, null);
+        });
+    }
+
+    @Test
+    void filter_by_string_observable_list_unchanged_if_input_empty()
+    {
         //given
         homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByString(null, homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString(" ",homeController.observableMovies);
 
         //when
         List<Movie> moviesExpected = homeController.observableMovies;
         //then
         assertEquals(moviesExpected, movies);
     }
+
+    @Test
+    void filter_by_string_observable_list_is_empty_if_observable_list_is_empty_from_begin()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> mvs = new ArrayList<>();
+        List<Movie> movies = homeController.filterByString("Joker",mvs);
+
+        assertEquals(0,movies.size());
+    }
+
+    @Test
+    void filter_by_string_observable_list_is_empty_if_observable_list_and_search_string_are_empty_from_begin()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> mvs = new ArrayList<>();
+        List<Movie> movies = homeController.filterByString(" ",mvs);
+
+        assertEquals(0,movies.size());
+    }
+
 
     @ParameterizedTest
     @ValueSource(strings = {"Joker", "joker", "JoKer","joKER", "JOKER"})
@@ -96,18 +132,7 @@ class HomeControllerTest {
         assertEquals(0,movies.size());
     }
 
-    @Test
-    void filter_by_title_string_when_input_empty_output_nothing_should_happen_to_observable_list()
-    {
-        //given
-        homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByString(" ",homeController.observableMovies);
 
-        //when
-        List<Movie> moviesExpected = homeController.observableMovies;
-        //then
-        assertEquals(moviesExpected, movies);
-    }
 
     @Test
     void filter_by_descriptive_string_matches_with_expected_output()
@@ -128,7 +153,6 @@ class HomeControllerTest {
         assertEquals(moviesExpected,movies);
     }
 
-
     @Test
     void filter_by_combined_title_and_description_returns_empty_list()
     {
@@ -142,9 +166,6 @@ class HomeControllerTest {
         //then
         assertEquals(moviesExpected, movies);
     }
-
-
-
 
 
     //-------------------------------------public List<Movie> filterByGenre(Genre genre, List<Movie> movies)------------------------------------------------------
@@ -167,6 +188,27 @@ class HomeControllerTest {
         //given
         homeController.initializeObserverable();
         List<Movie> movies = homeController.filterByGenre(Genre.ROMANCE,homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = new ArrayList<>();
+        moviesExpected.add(new Movie(
+                "Titanic",
+                "A young aristocrat falls in love with a kind but poor artist aboard the ill-fated Titanic, as the ship meets its tragic destiny.",
+                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.HISTORY)));
+
+        //then
+        assertEquals(moviesExpected,movies);
+    }
+
+    //-------------------------------------filterByGenre && filterByString------------------------------------------------------
+
+    @Test
+    void right_search_string_but_false_genre_results_in_no_results()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByGenre(Genre.ROMANCE,homeController.observableMovies);
+
 
         //when
         List<Movie> moviesExpected = new ArrayList<>();
