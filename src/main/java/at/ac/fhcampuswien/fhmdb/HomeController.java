@@ -100,16 +100,16 @@ public class HomeController implements Initializable {
 
     public List<Movie> filterByString(String inputText, List<Movie> movies) {
 
+        if (movies == null) {
+            throw new IllegalArgumentException("The movies list cannot be null.");
+        }
+
         if (inputText == null || inputText.isEmpty()) {
             return movies;
         }
 
         inputText = inputText.toLowerCase();
         List<Movie> result = new ArrayList<>();
-
-        if (movies == null) {
-            throw new IllegalArgumentException("The movies list cannot be null.");
-        }
 
         for (Movie movie : movies) {
             if (movie == null) {
@@ -128,6 +128,11 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> filterByGenre(Genre genre, List<Movie> movies) {
+
+        if (movies == null) {
+            throw new IllegalArgumentException("The movies list cannot be null.");
+        }
+
         List<Movie> result = new ArrayList<>();
         if (genre == null) {
             return movies;
