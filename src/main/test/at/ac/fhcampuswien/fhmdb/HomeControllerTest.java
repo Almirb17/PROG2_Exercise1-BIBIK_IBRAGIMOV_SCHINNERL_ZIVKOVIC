@@ -249,22 +249,64 @@ class HomeControllerTest {
     //-------------------------------------filterByGenre && filterByString------------------------------------------------------
 
     @Test
-    void right_search_string_but_false_genre_results_in_no_results()
-    {
+    void right_search_string_and_right_genre_results_with_expected_output() {
         //given
         homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByGenre(Genre.ROMANCE,homeController.observableMovies);
-
+        List<Movie> moviesFilteredByGenre = homeController.filterByGenre(Genre.THRILLER, homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString("Skyfall", moviesFilteredByGenre);
 
         //when
         List<Movie> moviesExpected = new ArrayList<>();
         moviesExpected.add(new Movie(
-                "Titanic",
-                "A young aristocrat falls in love with a kind but poor artist aboard the ill-fated Titanic, as the ship meets its tragic destiny.",
-                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.HISTORY)));
+                "Skyfall",
+                "James Bond must uncover the truth behind a cyber attack on MI6 while dealing with a villain from M's past.",
+                Arrays.asList(Genre.ACTION, Genre.ADVENTURE, Genre.THRILLER)));
 
         //then
-        assertEquals(moviesExpected,movies);
+        assertEquals(moviesExpected, movies);
+    }
+
+
+    @Test
+    void right_search_string_but_wrong_genre_returns_empty_list() {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> moviesFilteredByGenre = homeController.filterByGenre(Genre.HISTORY, homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString("Skyfall", moviesFilteredByGenre);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList();
+
+        //then
+        assertEquals(moviesExpected, movies);
+    }
+
+    @Test
+    void wrong_search_string_but_right_genre_returns_empty_list() {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> moviesFilteredByGenre = homeController.filterByGenre(Genre.ACTION, homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString("SpiderMan", moviesFilteredByGenre);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList();
+
+        //then
+        assertEquals(moviesExpected, movies);
+    }
+
+    @Test
+    void wrong_search_string_and_wrong_genre_returns_empty_list() {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> moviesFilteredByGenre = homeController.filterByGenre(Genre.ANIMATION, homeController.observableMovies);
+        List<Movie> movies = homeController.filterByString("Inceptionn", moviesFilteredByGenre);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList();
+
+        //then
+        assertEquals(moviesExpected, movies);
     }
 
     //-------------------------------------Sorting------------------------------------------------------
