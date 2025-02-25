@@ -125,6 +125,23 @@ class HomeControllerTest {
     }
 
 
+    @Test
+    void filter_by_combined_title_and_description_returns_empty_list()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByString("Inception A thief who enters", homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = Arrays.asList();
+
+        //then
+        assertEquals(moviesExpected, movies);
+    }
+
+
+
+
 
     //-------------------------------------public List<Movie> filterByGenre(Genre genre, List<Movie> movies)------------------------------------------------------
     @Test
