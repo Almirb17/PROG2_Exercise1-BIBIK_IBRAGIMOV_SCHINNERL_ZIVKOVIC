@@ -49,10 +49,15 @@ class HomeControllerTest {
     }
 
     @Test
-    void filter_by_string_throws_IllegalArgumentException_when_input_text_is_null() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            homeController.filterByString(null, homeController.observableMovies);
-        });
+    void filter_by_string_do_not_change_observable_list_when_input_text_is_null() {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByString(null,homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = homeController.observableMovies;
+        //then
+        assertEquals(moviesExpected, movies);
     }
 
     @Test
@@ -83,6 +88,7 @@ class HomeControllerTest {
         List<Movie> mvs = new ArrayList<>();
         List<Movie> movies = homeController.filterByString("Joker",mvs);
 
+        //when & then
         assertEquals(0,movies.size());
     }
 
@@ -134,7 +140,6 @@ class HomeControllerTest {
     }
 
 
-
     @Test
     void filter_by_descriptive_string_matches_with_expected_output()
     {
@@ -171,8 +176,16 @@ class HomeControllerTest {
 
     //-------------------------------------public List<Movie> filterByGenre(Genre genre, List<Movie> movies)------------------------------------------------------
     @Test
-    void filter_by_genre_with_null_returns_full_list()
-    {
+    void filter_by_genre_throws_IllegalArgumentException_when_movie_is_null() {
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filterByGenre(Genre.DRAMA, null);
+        });
+    }
+
+    @Test
+    void filter_by_genre_do_not_change_observable_list_when_input_genre_is_null() {
+
         //given
         homeController.initializeObserverable();
         List<Movie> movies = homeController.filterByGenre(null,homeController.observableMovies);
@@ -180,26 +193,58 @@ class HomeControllerTest {
         //when
         List<Movie> moviesExpected = homeController.observableMovies;
         //then
-        assertEquals(moviesExpected,movies);
+        assertEquals(moviesExpected, movies);
     }
 
     @Test
-    void filter_by_genre_matches_with_actual_output()
+    void filter_by_genre_throws_IllegalArgumentException_when_movie_and_genre_null() {
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filterByGenre(null, null);
+        });
+    }
+
+    @Test
+    void filter_by_genre_observable_list_is_empty_if_observable_list_is_empty_from_begin()
     {
         //given
         homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByGenre(Genre.ROMANCE,homeController.observableMovies);
+        List<Movie> mvs = new ArrayList<>();
+        List<Movie> movies = homeController.filterByGenre(Genre.DRAMA,mvs);
 
-        //when
-        List<Movie> moviesExpected = new ArrayList<>();
-        moviesExpected.add(new Movie(
-                "Titanic",
-                "A young aristocrat falls in love with a kind but poor artist aboard the ill-fated Titanic, as the ship meets its tragic destiny.",
-                Arrays.asList(Genre.DRAMA, Genre.ROMANCE, Genre.HISTORY)));
-
-        //then
-        assertEquals(moviesExpected,movies);
+        //when & then
+        assertEquals(0,movies.size());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "ACTION, 7",
+            "ADVENTURE, 5",
+            "ANIMATION, 1",
+            "BIOGRAPHY, 0",
+            "COMEDY, 0",
+            "CRIME, 2",
+            "DRAMA, 3",
+            "DOCUMENTARY, 0",
+            "FAMILY, 0",
+            "FANTASY, 0",
+            "HISTORY, 1",
+            "HORROR, 1",
+            "MUSICAL, 0",
+            "MYSTERY, 1",
+            "ROMANCE, 1",
+            "SCIENCE_FICTION, 4",
+            "SPORT, 0",
+            "THRILLER, 5",
+            "WAR, 0",
+            "WESTERN, 0"
+    })
+    void filterByGenreWithVariousInputs(Genre genre, int expectedSize) {
+        List<Movie> result = homeController.filterByGenre(genre, homeController.allMovies);
+        assertEquals(expectedSize, result.size());
+    }
+
+
 
     //-------------------------------------filterByGenre && filterByString------------------------------------------------------
 
