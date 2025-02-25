@@ -19,19 +19,22 @@ class HomeControllerTest {
         homeController = new HomeController();
     }
 
+
+    //-------------------------------------public void initialize(URL url, ResourceBundle resourceBundle)---------------------------------------------------------
+
+
+
+    //-------------------------------------public void initializeObserverable()-----------------------------------------------------------------------------------
     @Test
-    void filter_by_genre_with_null_returns_full_list()
-    {
-        //given
+    void dummy_films_are_inside_observable_list() {
         homeController.initializeObserverable();
-        List<Movie> movies = homeController.filterByGenre(null,homeController.observableMovies);
-
-        //when
-        List<Movie> moviesExpected = homeController.observableMovies;
-        //then
-        assertEquals(moviesExpected,movies);
+        assertEquals(homeController.allMovies, homeController.observableMovies);
     }
+    //-------------------------------------public void searchBtnClicked(ActionEvent actionEvent)------------------------------------------------------------------
 
+
+
+    //-------------------------------------public List<Movie> filterByString(String inputText, List<Movie> movies)------------------------------------------------
     @Test
     void filter_by_string_matches_with_actual_output()
     {
@@ -54,6 +57,19 @@ class HomeControllerTest {
         //then
         assertEquals(moviesExpected,movies);
     }
+    //-------------------------------------public List<Movie> filterByGenre(Genre genre, List<Movie> movies)------------------------------------------------------
+    @Test
+    void filter_by_genre_with_null_returns_full_list()
+    {
+        //given
+        homeController.initializeObserverable();
+        List<Movie> movies = homeController.filterByGenre(null,homeController.observableMovies);
+
+        //when
+        List<Movie> moviesExpected = homeController.observableMovies;
+        //then
+        assertEquals(moviesExpected,movies);
+    }
 
     @Test
     void filter_by_genre_matches_with_actual_output()
@@ -72,11 +88,4 @@ class HomeControllerTest {
         //then
         assertEquals(moviesExpected,movies);
     }
-
-    @Test
-    void at_initialization() {
-        homeController.initializeObserverable();
-        assertEquals(homeController.allMovies, homeController.observableMovies);
-    }
-
 }

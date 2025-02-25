@@ -83,4 +83,18 @@ public class Movie {
 
         return movies;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Movie movie = (Movie) obj;
+        return title.equals(movie.title) &&
+                description.equals(movie.description) &&
+                genres.equals(movie.genres);
+    }
 }
