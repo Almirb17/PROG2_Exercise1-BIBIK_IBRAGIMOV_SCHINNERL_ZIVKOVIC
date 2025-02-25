@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -12,7 +13,8 @@ import javafx.scene.paint.Color;
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
-    private final VBox layout = new VBox(title, detail);
+    private final Label genres = new Label();
+    private final VBox layout = new VBox(title, detail, genres);
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
@@ -29,6 +31,17 @@ public class MovieCell extends ListCell<Movie> {
                             ? movie.getDescription()
                             : "No description available"
             );
+
+
+            StringBuilder genreText = new StringBuilder();
+            for (Genre genre : movie.getGenres()) {
+                if (genreText.length() > 0) {
+                    genreText.append(", ");
+                }
+                genreText.append(genre.name());
+            }
+            genres.setText(genreText.toString());
+            genres.getStyleClass().add("text-white");
 
 
             // color scheme
